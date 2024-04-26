@@ -1,0 +1,65 @@
+MariaDB [(none)]> USE dbpos_sib6;
+Database changed
+MariaDB [dbpos_sib6]> DESC produk;
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| id              | int(11)      | NO   | PRI | NULL    | auto_increment |
+| kode            | varchar(10)  | NO   | UNI | NULL    |                |
+| nama            | varchar(45)  | NO   |     | NULL    |                |
+| harga_beli      | double       | NO   |     | NULL    |                |
+| harga_jual      | double       | NO   |     | NULL    |                |
+| stok            | int(11)      | NO   |     | NULL    |                |
+| min_stok        | int(11)      | NO   |     | NULL    |                |
+| foto            | varchar(255) | YES  |     | NULL    |                |
+| deskripsi       | text         | YES  |     | NULL    |                |
+| jenis_produk_id | int(11)      | NO   | MUL | NULL    |                |
++-----------------+--------------+------+-----+---------+----------------+
+10 rows in set (0.021 sec)
+
+MariaDB [dbpos_sib6]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [dbpos_sib6]> INSERT INTO produk (kode, nama, harga_beli, harga_jual, stok, min_stok, foto, deskripsi, jenis_produk_id)
+    -> VALUES ('PR001', 'Produk A', 40000, 50000, 10, 5, '/path/to/image1.jpg', 'Deskripsi Produk A', 1),
+    ->        ('PR002', 'Produk B', 50000, 60000, 20, 10, '/path/to/image2.jpg', 'Deskripsi Produk B', 2),
+    ->        ('PR003', 'Produk C', 60000, 70000, 30, 15, '/path/to/image3.jpg', 'Deskripsi Produk C', 3);
+Query OK, 3 rows affected (0.005 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [dbpos_sib6]> UPDATE produk SET stok = 8 WHERE kode = 'PR001';
+Query OK, 1 row affected (0.000 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpos_sib6]> SAVEPOINT saat_ini;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [dbpos_sib6]> DELETE FROM pembayaran WHERE id = 1;
+Query OK, 1 row affected (0.005 sec)
+
+MariaDB [dbpos_sib6]> ROLLBACK TO saat_ini;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [dbpos_sib6]> UPDATE kartu SET iuran = 5000 WHERE id = 1;
+Query OK, 1 row affected (0.000 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbpos_sib6]> COMMIT;
+Query OK, 0 rows affected (0.005 sec)
+
+MariaDB [dbpos_sib6]> DESC produk;
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| id              | int(11)      | NO   | PRI | NULL    | auto_increment |
+| kode            | varchar(10)  | NO   | UNI | NULL    |                |
+| nama            | varchar(45)  | NO   |     | NULL    |                |
+| harga_beli      | double       | NO   |     | NULL    |                |
+| harga_jual      | double       | NO   |     | NULL    |                |
+| stok            | int(11)      | NO   |     | NULL    |                |
+| min_stok        | int(11)      | NO   |     | NULL    |                |
+| foto            | varchar(255) | YES  |     | NULL    |                |
+| deskripsi       | text         | YES  |     | NULL    |                |
+| jenis_produk_id | int(11)      | NO   | MUL | NULL    |                |
++-----------------+--------------+------+-----+---------+----------------+
+10 rows in set (0.019 sec)
